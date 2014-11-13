@@ -1,5 +1,9 @@
 assets/*
 !assets/.gitignore
+!assets/css
+!assets/js
+!assets/img
+!assets/fonts
 protected/runtime/*
 !protected/runtime/.gitignore
 protected/data/*.db
