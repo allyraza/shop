@@ -21,7 +21,7 @@
 			<?= CHtml::encode(Yii::app()->name) ?>
 		</div>
 		<div id="cart">
-			<?php $this->widget('ShoppingCartWidget') ?>	
+			<?php $this->widget('shop.widgets.ShoppingCartWidget') ?>	
 		</div>
 		<!-- /cart -->
 	</header>

@@ -1,5 +1,7 @@
 <?php
 
+Yii::setPathOfAlias('shop', __DIR__);
+
 class ShopModule extends CWebModule {
 
 	public $version = '0.7';
@@ -67,4 +69,5 @@ class ShopModule extends CWebModule {
 		else
 			return false;
 	}
+
 }
