@@ -246,7 +246,7 @@ class InstallController extends Controller {
 
 					$db->createCommand($sql)->execute();
 
-					if ($this->module->installDemoData) 
+					if ($this->module->demo) 
 					{
 						$sql = "INSERT INTO `".$categoryTable."` (`category_id`, `parent_id`, `title`) VALUES
 							(1, 0, 'Men'),

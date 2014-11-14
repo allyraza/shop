@@ -101,7 +101,7 @@ your Yii Web Application </p>
 </table>
 
 <p> Your Product images will be stored unter Approot
-<?php echo $module->productImagesFolder; ?> </p>
+<?php echo $module->uploads; ?> </p>
 </div>
 
 

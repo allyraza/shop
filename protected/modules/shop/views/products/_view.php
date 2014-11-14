@@ -5,7 +5,7 @@
         if ($data->images)
             $this->renderPartial('/images/view', ['thumb' =>true, 'model' => $data->images[0]]);
         else
-            echo CHtml::image($this->module->publishAssets().'img/no-pic.jpg');
+            echo CHtml::image(Yii::app()->request->baseUrl.'/assets/img/placeholder.jpg', '', ['width'=>120]);
     ?>
     </div>
 
