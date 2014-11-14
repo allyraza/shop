@@ -1,11 +1,19 @@
 <?php
 
-class ShoppingCartController extends Controller {
+class CartController extends BaseController {
 
-	public function actionView()
+	public function actionIndex()
 	{
-		$cart = Shop::getCartContent();
-		$this->render('view', ['products'=>$cart]);
+		$this->render('view', ['products' => Shop::getCartContent()]);
+	}
+
+	public function actionMycart()
+	{
+		if (isset($_SESSION['cartowner']))
+		{
+			$carts = Cart::model()->findAllByAttributes(['cartowner' => $_SESSION['cartowner']]);
+			$this->render('index', ['carts'=>$carts]);
+		} 
 	}
 
 	public function actionGetPriceTotal()
@@ -17,11 +25,11 @@ class ShoppingCartController extends Controller {
 	{
 		$cart = Shop::getCartContent();
 
-		foreach($_GET as $key => $value)
+		foreach ($_GET as $key => $value)
 		{
 			if (substr($key, 0, 7) == 'amount_')
 			{
-				if($value == '')
+				if ($value == '')
 					return true;
 
 				if (!is_numeric($value) || $value <= 0)
@@ -44,11 +52,13 @@ class ShoppingCartController extends Controller {
 	// Add a new product to the shopping cart
 	public function actionCreate()
 	{
+
 		if (!is_numeric($_POST['amount']) || $_POST['amount'] <= 0)
 		{
 			Shop::setFlash(Shop::t('Illegal amount given'));
 			$this->redirect(['//shop/products/view', 'id' => $_POST['product_id']]);
 		}
+
 		if (isset($_POST['Variations']))
 		{
 			foreach ($_POST['Variations'] as $key => $variation)
@@ -63,13 +73,11 @@ class ShoppingCartController extends Controller {
 			}
 		}
 
-
 		$cart = Shop::getCartContent();
-
 		// remove potential clutter
-		if(isset($_POST['yt0']))
+		if (isset($_POST['yt0']))
 			unset($_POST['yt0']);
-		if(isset($_POST['yt1']))
+		if (isset($_POST['yt1']))
 			unset($_POST['yt1']);
 
 		$cart[] = $_POST;
@@ -85,26 +93,18 @@ class ShoppingCartController extends Controller {
 		$cart = json_decode(Yii::app()->user->getState('cart'), true);
 		unset($cart[$id]);
 		Yii::app()->user->setState('cart', json_encode($cart));
-		$this->redirect(array('//shop/shoppingCart/view'));
-	}
-
-	public function actionIndex()
-	{
-		if (isset($_SESSION['cartowner']))
-		{
-			$carts = ShoppingCart::model()->findAll('cartowner = :cartowner', array(':cartowner' => $_SESSION['cartowner']));
-			$this->render('index',array( 'carts'=>$carts,));
-		} 
+		$this->redirect(['/shop/cart']);
 	}
 
 	public function actionAdmin()
 	{
 		$model=new ShoppingCart('search');
 		if (isset($_GET['ShoppingCart']))
+		{
 			$model->attributes=$_GET['ShoppingCart'];
-			$model->cartowner = Yii::app()->User->getState('cartowner');
-
-		$this->render('admin',['model'=>$model]);
+			$model->cartowner=Yii::app()->user->getState('cartowner');
+		}
+		$this->render('admin', ['model'=>$model]);
 	}
 
 	public function loadModel()
@@ -121,7 +121,7 @@ class ShoppingCartController extends Controller {
 
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='shopping cart-form')
+		if (isset($_POST['ajax']) && $_POST['ajax']==='cart-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

@@ -103,32 +103,30 @@ return $str;
 
 
 		$i = 0;
-		foreach($model->variations as $variation) { 
+		foreach ($model->variations as $variation)
+		{ 
 			echo renderVariation($variation, $i); 
 			$i++;
 		}
 
 			echo renderVariation(null, $i); 
  ?>
-	</table>	
-	<?php echo CHtml::button(Shop::t('Save specifications'), array(
-				'submit' => array(
-					'//shop/products/update',
-					'return' => 'product',
-					'id' => $model->product_id))); ?>
-
-
-				</fieldset>
-
+		</table>	
+		<?= CHtml::button(Shop::t('Save specifications'), [
+			'submit' => [
+				'/shop/products/update',
+				'return' => 'product',
+				'id' => $model->product_id
+			]
+		]); ?>
+	</fieldset>
 <?php } ?>
 
+	<div class="row buttons">
+		<?= CHtml::submitButton($model->isNewRecord
+				? Yii::t('ShopModule.shop', 'Create') 
+				: Yii::t('ShopModule.shop', 'Save')) ?>
+	</div>
 
-				<div class="row buttons">
-				<?php echo CHtml::submitButton($model->isNewRecord ?
-						Yii::t('ShopModule.shop', 'Create') 
-						: Yii::t('ShopModule.shop', 'Save')); ?>
-				</div>
-
-				<?php $this->endWidget(); ?>
-
-				</div><!-- form -->
+<?php $this->endWidget() ?>
+</div><!-- form -->

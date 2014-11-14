@@ -1,7 +1,7 @@
 <?php
 
-class CustomerController extends Controller
-{
+class CustomersController extends Controller {
+
 	public $_model;
 
 	public function beforeAction($action) {
@@ -146,4 +146,5 @@ class CustomerController extends Controller
 			Yii::app()->end();
 		}
 	}
+
 }

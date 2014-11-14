@@ -1,24 +1,24 @@
 <div class="view product-view">
 
-    <h3><?= CHtml::link(CHtml::encode($data->title), ['products/view', 'id' => $data->product_id]) ?></h3>
-    
-    <div class="media">	
+    <div class="media"> 
     <?php
         if ($data->images)
-            $this->renderPartial('/image/view', ['thumb' =>true, 'model' => $data->images[0]]);
+            $this->renderPartial('/images/view', ['thumb' =>true, 'model' => $data->images[0]]);
         else
-            echo CHtml::image(Shop::register('no-pic.jpg'));
+            echo CHtml::image($this->module->publishAssets().'img/no-pic.jpg');
     ?>
-	</div>
+    </div>
+
+    <h3><?= CHtml::link(CHtml::encode($data->title), $data->url) ?></h3>
     
     <div class="product-info">
-        <strong><?= Shop::priceFormat($data->price) ?></strong><br />
-        <p><?= Shop::pricingInfo() ?></p>
-        <?= CHtml::link(Shop::t('Buy Now'), ['products/view', 'id' => $data->product_id]) ?>
+        <strong><?= $data->formatedPrice ?></strong>
+        <br>
+        <?= CHtml::link(Shop::t('Buy Now'), [
+            '/shop/products/view', 
+            'category'=> $data->category->title,
+            'product'=> preg_replace('/[^a-zA-Z0-9]/', '-', $data->title),
+            'id' => $data->product_id]
+        ) ?>
     </div>
-
-    <div class="description">
-        <?= CHtml::encode($data->description) ?>
-    </div>
-
 </div>

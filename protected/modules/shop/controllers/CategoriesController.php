@@ -1,10 +1,11 @@
 <?php
 
-class CategoryController extends Controller
-{
+class CategoriesController extends BaseController {
+
 	public $_model;
 
-	public function beforeAction($action) {
+	public function beforeAction($action)
+	{
 		$this->layout = Shop::module()->layout;
 		return parent::beforeAction($action);
 	}
@@ -22,7 +23,7 @@ class CategoryController extends Controller
 
 		$this->performAjaxValidation($model);
 
-		if(isset($_POST['Category']))
+		if (isset($_POST['Category']))
 		{
 			$model->attributes=$_POST['Category'];
 			if($model->save())
@@ -40,10 +41,10 @@ class CategoryController extends Controller
 
 		$this->performAjaxValidation($model);
 
-		if(isset($_POST['Category']))
+		if (isset($_POST['Category']))
 		{
 			$model->attributes=$_POST['Category'];
-			if($model->save())
+			if ($model->save())
 				$this->redirect(array('shop/admin'));
 		}
 
@@ -58,13 +59,13 @@ class CategoryController extends Controller
 	 */
 	public function actionDelete()
 	{
-		if(Yii::app()->request->isPostRequest)
+		if (Yii::app()->request->isPostRequest)
 		{
 			// we only allow deletion via POST request
 			$this->loadModel()->delete();
 
 			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-			if(!isset($_POST['ajax']))
+			if (!isset($_POST['ajax']))
 				$this->redirect(array('index'));
 		}
 		else
@@ -88,7 +89,7 @@ class CategoryController extends Controller
 	public function actionAdmin()
 	{
 		$model=new Category('search');
-		if(isset($_GET['Category']))
+		if (isset($_GET['Category']))
 			$model->attributes=$_GET['Category'];
 
 		$this->render('admin',array(
@@ -102,11 +103,11 @@ class CategoryController extends Controller
 	 */
 	public function loadModel()
 	{
-		if($this->_model===null)
+		if ($this->_model===null)
 		{
-			if(isset($_GET['id']))
+			if (isset($_GET['id']))
 				$this->_model=Category::model()->findbyPk($_GET['id']);
-			if($this->_model===null)
+			if ($this->_model===null)
 				throw new CHttpException(404,'The requested page does not exist.');
 		}
 		return $this->_model;
@@ -118,10 +119,11 @@ class CategoryController extends Controller
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='category-form')
+		if (isset($_POST['ajax']) && $_POST['ajax']==='category-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
 	}
+
 }

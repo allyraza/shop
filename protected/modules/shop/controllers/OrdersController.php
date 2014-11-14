@@ -1,7 +1,7 @@
 <?php
 
-class OrderController extends Controller
-{
+class OrdersController extends Controller {
+
 	public $_model;
 
 	public function filters()

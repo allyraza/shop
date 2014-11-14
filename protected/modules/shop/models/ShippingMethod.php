@@ -9,8 +9,8 @@
  * @property integer $tax_id
  * @property double $price
  */
-class ShippingMethod extends CActiveRecord
-{
+class ShippingMethod extends CActiveRecord {
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @return ShippingMethod the static model class
@@ -18,6 +18,11 @@ class ShippingMethod extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	public function getFormatedPrice()
+	{
+		return Yii::app()->numberFormatter->formatCurrency($this->price, '$');
 	}
 
 	/**
@@ -92,4 +97,5 @@ class ShippingMethod extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
 }

@@ -1,11 +1,13 @@
 <?php
 
-class ProductSpecificationController extends Controller {
+class ShippingMethodsController extends Controller {
+
+	public $defaultAction = 'admin';
 
 	public function filters()
 	{
 		return array(
-			'accessControl', // perform access control for CRUD operations
+			'accessControl',
 		);
 	}
 
@@ -18,16 +20,12 @@ class ProductSpecificationController extends Controller {
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+		array('allow', 
+				'actions'=>array('choose'),
 				'users'=>array('*'),
 			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
+			array('allow', 
+				'actions'=>array('admin','delete', 'create', 'update', 'index', 'view'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -36,10 +34,10 @@ class ProductSpecificationController extends Controller {
 		);
 	}
 
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
+	public function actionChoose() {
+		$this->render('choose', array('customer' => Shop::getCustomer()));
+	}
+
 	public function actionView($id)
 	{
 		$this->render('view',array(
@@ -47,20 +45,16 @@ class ProductSpecificationController extends Controller {
 		));
 	}
 
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
 	public function actionCreate()
 	{
-		$model=new ProductSpecification;
+		$model=new ShippingMethod;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['ProductSpecification']))
+		if(isset($_POST['ShippingMethod']))
 		{
-			$model->attributes=$_POST['ProductSpecification'];
+			$model->attributes=$_POST['ShippingMethod'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -82,9 +76,9 @@ class ProductSpecificationController extends Controller {
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['ProductSpecification']))
+		if(isset($_POST['ShippingMethod']))
 		{
-			$model->attributes=$_POST['ProductSpecification'];
+			$model->attributes=$_POST['ShippingMethod'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -119,10 +113,7 @@ class ProductSpecificationController extends Controller {
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('ProductSpecification');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
+		$this->actionAdmin();
 	}
 
 	/**
@@ -130,10 +121,10 @@ class ProductSpecificationController extends Controller {
 	 */
 	public function actionAdmin()
 	{
-		$model=new ProductSpecification('search');
+		$model=new ShippingMethod('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['ProductSpecification']))
-			$model->attributes=$_GET['ProductSpecification'];
+		if(isset($_GET['ShippingMethod']))
+			$model->attributes=$_GET['ShippingMethod'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -147,7 +138,7 @@ class ProductSpecificationController extends Controller {
 	 */
 	public function loadModel($id)
 	{
-		$model=ProductSpecification::model()->findByPk((int)$id);
+		$model=ShippingMethod::model()->findByPk((int)$id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -159,10 +150,11 @@ class ProductSpecificationController extends Controller {
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='product-specification-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='shipping-method-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
 	}
+
 }

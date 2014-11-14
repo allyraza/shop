@@ -1,6 +1,6 @@
 <?php 
 
-$model = new Products();
+$model = new Product;
 
 $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'products-grid',

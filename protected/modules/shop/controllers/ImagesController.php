@@ -1,7 +1,7 @@
 <?php
 
-class ImageController extends Controller
-{
+class ImagesController extends Controller {
+
 	public $_model;
 
 	public function beforeAction($action) {

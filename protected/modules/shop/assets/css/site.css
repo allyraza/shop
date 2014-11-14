@@ -13,10 +13,15 @@ body
 	margin: 0 auto;
 }
 
-#header
+#site-header
 {
 	margin: 0;
 	padding: 0;
+}
+
+#site-header #identity 
+{
+	margin: 20px 0;
 }
 
 #content
@@ -36,12 +41,6 @@ body
 	font-size: 0.8em;
 	text-align: center;
 	border-top: 1px solid #C9E0ED;
-}
-
-#logo
-{
-	padding: 10px 20px;
-	font-size: 200%;
 }
 
 .navbar-gray
@@ -108,7 +107,7 @@ div.view
 div.breadcrumbs
 {
 	font-size: 0.9em;
-	padding: 5px 20px;
+	padding: 10px;
 }
 
 div.breadcrumbs span

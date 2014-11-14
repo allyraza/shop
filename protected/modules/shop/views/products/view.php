@@ -1,58 +1,49 @@
 <?php
-$this->breadcrumbs=array(
-	Shop::t('Products')=>array('index'),
+$this->breadcrumbs=[
+	Shop::t('Products')=>['index'],
 	$model->title,
-);
-
+];
 ?>
-
-<div class="product-header">
-    <h2 class="title"><?php echo $model->title; ?></h2>
-    <?php printf('<h2 class="price">%s</h2>',
-            Shop::priceFormat($model->price));
-    ?>
-</div>
-
-<div class="clear"></div>
 
 <div class="product-images">
 <?php 
-if($model->images) {
-	foreach($model->images as $image) {
-		$this->renderPartial('/image/view', array( 'model' => $image));
-		echo '<br />'; 
-	}
-} else 
-$this->renderPartial('/image/view', array( 'model' => new Image()));
-?>	
+	if ($model->images):
+		foreach ($model->images as $image)
+			$this->renderPartial('/images/view', ['model' => $image]);
+	else:
+		$this->renderPartial('/images/view', ['model' => new Image]);
+	endif
+?>
 </div>
+
+<header>
+    <h2><?= $model->title ?></h2>
+    <strong><?= $model->formatedPrice ?></strong>
+</header>
 
 <div class="product-options"> 
-	<?php $this->renderPartial('/products/addToCart', array(
-			'model' => $model)); ?>
+	<?php $this->renderPartial('/products/_add_to_cart', ['model' => $model]); ?>
 </div>
-
 
 <div class="product-description">
-	<p> <?php echo $model->description; ?> </p>
+	<?= $model->description ?>
 </div>
 
-
-<?php 
-$specs = $model->getSpecifications();
-if($specs) {
-	echo '<table>';
-	
-	printf ('<tr><td colspan="2"><strong>%s</strong></td></tr>',
-			Shop::t('Product Specifications'));
-			
-	foreach($specs as $key => $spec) {
-		if($spec != '')
-			printf('<tr> <td> %s: </td> <td> %s </td> </td>',
-					$key,
-					$spec);
+<?php if ($model->specifications): ?>
+<table>
+	<tr><td colspan="2"><strong><?= Shop::t('Product Specifications') ?></strong></td></tr>
+<?php
+	foreach ($model->specifications as $key => $spec)
+	{
+		if (!empty($spec))
+			printf('<tr><td>%s:</td><td>%s</td></td>', $key, $spec);
 	}
-	
-	echo '</table>';
-} 
 ?>
+</table>
+<?php endif ?>
+
+<div id="support">
+	<?= Shop::t('All prices are including VAT') ?>
+	<?= Shop::t('All prices excluding shipping costs') ?>
+	<?php $this->renderPartial('/shippingMethod/index') ?>
+</div>

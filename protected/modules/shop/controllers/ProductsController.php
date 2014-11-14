@@ -28,8 +28,9 @@ class ProductsController extends Controller
 				);
 	}
 
-	public function beforeAction($action) {
-		$this->layout = Shop::module()->layout;
+	public function beforeAction($action)
+	{
+		$this->layout = $this->module->layout;
 		return parent::beforeAction($action);
 	}
 
@@ -42,13 +43,13 @@ class ProductsController extends Controller
 
 	public function actionCreate()
 	{
-		$model=new Products;
+		$model=new Product;
 
 		 $this->performAjaxValidation($model);
 
-		if(isset($_POST['Products']))
+		if(isset($_POST['Product']))
 		{
-			$model->attributes=$_POST['Products'];
+			$model->attributes=$_POST['Product'];
 			if(isset($_POST['Specifications']))
 				$model->setSpecifications($_POST['Specifications']);
 
@@ -68,9 +69,9 @@ class ProductsController extends Controller
 
 		$this->performAjaxValidation($model);
 
-		if(isset($_POST['Products']))
+		if(isset($_POST['Product']))
 		{
-			$model->attributes=$_POST['Products'];
+			$model->attributes=$_POST['Product'];
 			if(isset($_POST['Specifications']))
 				$model->setSpecifications($_POST['Specifications']);
 			if(isset($_POST['Variations']))
@@ -112,7 +113,7 @@ class ProductsController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider = new CActiveDataProvider('Products');
+		$dataProvider = new CActiveDataProvider('Product');
 
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
@@ -124,9 +125,9 @@ class ProductsController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Products('search');
-		if(isset($_GET['Products']))
-			$model->attributes=$_GET['Products'];
+		$model=new Product('search');
+		if (isset($_GET['Product']))
+			$model->attributes=$_GET['Product'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -142,7 +143,7 @@ class ProductsController extends Controller
 		if($this->_model===null)
 		{
 			if(isset($_GET['id']))
-				$this->_model=Products::model()->findbyPk($_GET['id']);
+				$this->_model=Product::model()->findbyPk($_GET['id']);
 			if($this->_model===null)
 				throw new CHttpException(404,'The requested page does not exist.');
 		}

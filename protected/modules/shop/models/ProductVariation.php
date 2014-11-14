@@ -10,8 +10,8 @@
  * @property string $title
  * @property double $price_adjustion
  */
-class ProductVariation extends CActiveRecord
-{
+class ProductVariation extends CActiveRecord {
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @return ProductVariation the static model class
@@ -21,18 +21,20 @@ class ProductVariation extends CActiveRecord
 		return parent::model($className);
 	}
 
-	public static function listData($variations) {
-		$var = array();
-
-		foreach($variations as $id => $variation) 
-			if($variation->price_adjustion == 0) 
-				$var[$variation->id] = sprintf('%s', $variation->title);
-			else
-				$var[$variation->id] = sprintf('%s (%s%s)',
-						$variation->title,
-						$variation->price_adjustion > 0 ? '+' : '',
-						Shop::priceFormat($variation->price_adjustion));
-
+	public static function listData($variation)
+	{
+		$var = [];
+		if ($variation->price_adjustion == 0) 
+			$var[$variation->id] = sprintf('%s', $variation->title);
+		else
+		{
+			$var[$variation->id] = sprintf(
+				'%s (%s%s)', 
+				$variation->title, 
+				$variation->price_adjustion > 0 ? '+' : '',
+				Yii::app()->numberFormatter->formatCurrency($variation->price_adjustion, '$')
+			);
+		}
 		return $var;
 	}
 

@@ -7,7 +7,7 @@
 // CWebApplication properties can be configured here.
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-	'name'=>'My Web Application',
+	'name'=>'Yii Shop',
 
 	// preloading 'log' component
 	'preload'=>array('log'),
@@ -42,7 +42,13 @@ return array(
 		'urlManager'=>[
 			'urlFormat'=>'path',
 			'rules'=>[
-				'<module>/<controller>/<id:\d+>'=>'<module>/<controller>/view',
+
+				// shop module routes
+				'/shop/<category:[\w-]+>/<product:[\w-]+>/<id:\d+>' => '/shop/products/view',
+				'/shop/<category:[\w-]+>/<id:\d+>' => '/shop/categories/view',
+				'<module>/<controller:\w+>/<id:\d+>'=>'<module>/<controller>/view',
+				'<module>/<controller:\w+>/<id:\d+>/update'=>'<module>/<controller>/update',
+
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',

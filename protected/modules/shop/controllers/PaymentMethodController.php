@@ -1,7 +1,7 @@
 <?php
 
-class PaymentMethodController extends Controller
-{
+class PaymentMethodController extends Controller {
+
 	public $defaultAction = 'admin';
 
 	public function filters()
@@ -163,4 +163,5 @@ class PaymentMethodController extends Controller
 			Yii::app()->end();
 		}
 	}
+
 }

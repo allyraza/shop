@@ -720,7 +720,8 @@ echo '</ul>';
 					array('multiple' => 'multiple'));
 		}
 
-		public function handleAjaxRequest($_POST) {
+		public function handleAjaxRequest()
+		{
 			print_r($_POST);
 		}
 

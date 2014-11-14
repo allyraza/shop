@@ -134,4 +134,5 @@ class OrderPosition extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
 }

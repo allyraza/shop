@@ -2,7 +2,7 @@
 
 Yii::import('zii.widgets.CPortlet');
 
-class ShoppingCartWidget extends CPortlet {
+class CartWidget extends CPortlet {
 	
 	public function	init()
 	{
@@ -16,7 +16,7 @@ class ShoppingCartWidget extends CPortlet {
 		if (!Shop::getCartContent())
 			return false;
 
-		$this->render('shopping_cart', ['products' => Shop::getCartContent()]);
+		$this->render('cart', ['products' => Shop::getCartContent()]);
 	}
 
 }

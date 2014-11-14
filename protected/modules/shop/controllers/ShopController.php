@@ -52,12 +52,12 @@ class ShopController extends Controller {
 
 	public function actionAdmin()
 	{
-		$this->render('admin', array( ));
+		$this->render('admin');
 	}
 
 	public function actionIndex()
 	{
-		$this->redirect(array('//shop/products/index'));
+		$this->redirect(['/shop/products']);
 	}
 
 }

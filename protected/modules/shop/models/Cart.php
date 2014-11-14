@@ -1,7 +1,7 @@
 <?php
 
-class ShoppingCart extends CActiveRecord
-{
+class Cart extends CActiveRecord {
+
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
@@ -12,11 +12,12 @@ class ShoppingCart extends CActiveRecord
 		return Yii::app()->controller->module->shoppingCartTable;
 	}
 
-	public static function getCartsOfOwner($cartowner = 'notset') {
-		if($cartowner == 'notset')
+	public static function getCartsOfOwner($cartowner = 'notset')
+	{
+		if ($cartowner == 'notset')
 			$cartowner = Yii::app()->User->getState('cartowner');
 
-		return ShoppingCart::model()->findAll('cartowner = :cartowner', array(':cartowner' => $cartowner));
+		return Cart::model()->findAll('cartowner = :cartowner', array(':cartowner' => $cartowner));
 	}
 
 	public function rules()
@@ -51,8 +52,8 @@ class ShoppingCart extends CActiveRecord
 	{
 		$criteria=new CDbCriteria;
 
-		if($this->cart_id == 0) 
-		$criteria->compare('cart_id',$this->cart_id);
+		if ($this->cart_id == 0) 
+			$criteria->compare('cart_id',$this->cart_id);
 
 		$criteria->compare('amount',$this->amount);
 		$criteria->compare('product_id',$this->product_id);
@@ -63,4 +64,5 @@ class ShoppingCart extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
 }

@@ -1,13 +1,11 @@
 <?php
 
-class ShippingMethodController extends Controller
-{
-	public $defaultAction = 'admin';
+class AttributesController extends Controller {
 
 	public function filters()
 	{
 		return array(
-			'accessControl',
+			'accessControl', // perform access control for CRUD operations
 		);
 	}
 
@@ -20,12 +18,16 @@ class ShippingMethodController extends Controller
 	public function accessRules()
 	{
 		return array(
-		array('allow', 
-				'actions'=>array('choose'),
+			array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('index','view'),
 				'users'=>array('*'),
 			),
-			array('allow', 
-				'actions'=>array('admin','delete', 'create', 'update', 'index', 'view'),
+			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array('create','update'),
+				'users'=>array('@'),
+			),
+			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array('admin','delete'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -34,10 +36,10 @@ class ShippingMethodController extends Controller
 		);
 	}
 
-	public function actionChoose() {
-		$this->render('choose', array('customer' => Shop::getCustomer()));
-	}
-
+	/**
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
 	public function actionView($id)
 	{
 		$this->render('view',array(
@@ -45,16 +47,20 @@ class ShippingMethodController extends Controller
 		));
 	}
 
+	/**
+	 * Creates a new model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 */
 	public function actionCreate()
 	{
-		$model=new ShippingMethod;
+		$model=new ProductSpecification;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['ShippingMethod']))
+		if(isset($_POST['ProductSpecification']))
 		{
-			$model->attributes=$_POST['ShippingMethod'];
+			$model->attributes=$_POST['ProductSpecification'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -76,9 +82,9 @@ class ShippingMethodController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['ShippingMethod']))
+		if(isset($_POST['ProductSpecification']))
 		{
-			$model->attributes=$_POST['ShippingMethod'];
+			$model->attributes=$_POST['ProductSpecification'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -113,7 +119,10 @@ class ShippingMethodController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$this->actionAdmin();
+		$dataProvider=new CActiveDataProvider('ProductSpecification');
+		$this->render('index',array(
+			'dataProvider'=>$dataProvider,
+		));
 	}
 
 	/**
@@ -121,10 +130,10 @@ class ShippingMethodController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new ShippingMethod('search');
+		$model=new ProductSpecification('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['ShippingMethod']))
-			$model->attributes=$_GET['ShippingMethod'];
+		if(isset($_GET['ProductSpecification']))
+			$model->attributes=$_GET['ProductSpecification'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -138,7 +147,7 @@ class ShippingMethodController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=ShippingMethod::model()->findByPk((int)$id);
+		$model=ProductSpecification::model()->findByPk((int)$id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -150,7 +159,7 @@ class ShippingMethodController extends Controller
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='shipping-method-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='product-specification-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

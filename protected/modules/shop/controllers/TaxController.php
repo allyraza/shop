@@ -1,7 +1,7 @@
 <?php
 
-class TaxController extends Controller
-{
+class TaxController extends Controller {
+
 	public function filters()
 	{
 		return array(
@@ -66,10 +66,10 @@ class TaxController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Tax']))
+		if (isset($_POST['Tax']))
 		{
 			$model->attributes=$_POST['Tax'];
-			if($model->save())
+			if ($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
@@ -85,13 +85,13 @@ class TaxController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		if(Yii::app()->request->isPostRequest)
+		if (Yii::app()->request->isPostRequest)
 		{
 			// we only allow deletion via POST request
 			$this->loadModel($id)->delete();
 
 			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-			if(!isset($_GET['ajax']))
+			if (!isset($_GET['ajax']))
 				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 		}
 		else
@@ -113,7 +113,7 @@ class TaxController extends Controller
 	{
 		$model=new Tax('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Tax']))
+		if (isset($_GET['Tax']))
 			$model->attributes=$_GET['Tax'];
 
 		$this->render('admin',array(
@@ -129,7 +129,7 @@ class TaxController extends Controller
 	public function loadModel($id)
 	{
 		$model=Tax::model()->findByPk((int)$id);
-		if($model===null)
+		if ($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}
@@ -146,4 +146,5 @@ class TaxController extends Controller
 			Yii::app()->end();
 		}
 	}
+
 }
