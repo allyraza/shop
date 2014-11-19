@@ -1,17 +1,17 @@
 <?php
 $points=[
-	Shop::t('Customer information'),
-	Shop::t('Shipping'),
-	Shop::t('Payment'),
-	Shop::t('Confirm'),
-	Shop::t('Success')
+	'Customer information',
+	'Shipping',
+	'Payment',
+	'Confirm',
+	'Success'
 ];
 
 $links = [
-	['/shop/customer/create'],
-	['/shop/shippingMethod/choose'],
-	['/shop/paymentMethod/choose'],
-	['/shop/order/create']
+	['/shop/customers/create'],
+	['/shop/shippingMethods/choose'],
+	['/shop/paymentMethods/choose'],
+	['/shop/orders/create']
 ];
 $cssClass = $point == 0 ? 'active' : '';
 ?>
@@ -19,7 +19,7 @@ $cssClass = $point == 0 ? 'active' : '';
 <div id="waypointarea" class="waypointarea">
 
 	<span class="waypoint <?= $cssClass ?>">
-		<?= CHtml::link(Shop::t('Shopping Cart'), ['//shop/cart/view']) ?>
+		<?= CHtml::link('Shopping Cart', ['/shop/cart']) ?>
 	</span>
 
 <?php

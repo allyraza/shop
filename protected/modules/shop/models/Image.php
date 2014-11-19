@@ -9,7 +9,7 @@ class Image extends CActiveRecord
 
 	public function tableName()
 	{
-		return Yii::app()->controller->module->imageTable;
+		return Yii::app()->controller->module->imagesTable;
 	}
 
 	public function rules()

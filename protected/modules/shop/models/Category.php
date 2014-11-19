@@ -1,27 +1,15 @@
 <?php
 
-class Category extends CActiveRecord
-{
+class Category extends CActiveRecord {
+
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}
 
-	public static function getChilds($id) {
-		$data = array();
-
-		foreach(Category::model()->findAll('parent_id = ' . $id) as $model) {
-			$row['text'] = CHtml::link($model->title, array('category/view', 'id' => $model->category_id));
-			$row['children'] = Category::getChilds($model->category_id);
-			$data[] = $row;
-		}
-		return $data;
-	}
-
-
 	public function tableName()
 	{
-		return Yii::app()->getModule('shop')->categoryTable;
+		return Yii::app()->controller->module->categoriesTable;
 	}
 
 	public function rules()
@@ -34,20 +22,10 @@ class Category extends CActiveRecord
 		);
 	}
 
-	public static function getListed() {
-		$subitems = array();
-		if($this->childs) foreach($this->childs as $child) {
-			$subitems[] = $child->getListed();
-		}
-		$returnarray = array('label' => $this->title, 'url' => array('Category/view', 'id' => $this->category_id));
-		if($subitems != array()) $returnarray = array_merge($returnarray, array('items' => $subitems));
-		return $returnarray;
-	}
-
 	public function relations()
 	{
 		return array(
-			'Products' => array(self::HAS_MANY, 'Products', 'category_id'),
+			'products' => array(self::HAS_MANY, 'Product', 'category_id'),
 			'parent' => array(self::BELONGS_TO, 'Category', 'parent_id'),
 			'childs' => array(self::HAS_MANY, 'Category', 'parent_id'),
 		);
@@ -68,15 +46,11 @@ class Category extends CActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
-
 		$criteria->compare('category_id',$this->category_id);
-
 		$criteria->compare('parent_id',$this->parent_id);
-
 		$criteria->compare('title',$this->title,true);
-
-		return new CActiveDataProvider('Category', array(
+		return new CActiveDataProvider('Category', [
 			'criteria'=>$criteria,
-		));
+		]);
 	}
 }

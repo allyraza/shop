@@ -40,7 +40,7 @@
 			['label'=>'All', 'url'=>['/shop/products']],
 		];
 		foreach (Category::model()->findAll() as $category)
-			$items[] = ['label' => $category->title,'url' => ['/shop/categories/view', 'category'=>$category->title, 'id'=>$category->category_id]];
+			$items[] = ['label' => $category->title,'url' => ['/shop/categories/view', 'category'=>$category->title, 'id'=>$category->id]];
 		$items[] = ['label'=>'Admin', 'url'=>['/shop/shop/admin']];
 		$this->widget('zii.widgets.CMenu', ['items'=>$items])
 	?>

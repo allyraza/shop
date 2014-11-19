@@ -21,8 +21,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 			'buttons' => array(
 				'images' => array(
 					'label' => Yii::t('ShopModule.shop', 'images'),
-					'url' => 'Yii::app()->createUrl("/shop/image/admin",
-					array("product_id" => $data->product_id))',
+					'url' => 'Yii::app()->createUrl("/shop/images/admin", ["product_id" => $data->product_id])',
 				),
 			),
 		),

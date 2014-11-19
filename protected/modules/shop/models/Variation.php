@@ -10,7 +10,7 @@
  * @property string $title
  * @property double $price_adjustion
  */
-class ProductVariation extends CActiveRecord {
+class Variation extends CActiveRecord {
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -47,7 +47,7 @@ class ProductVariation extends CActiveRecord {
 	 */
 	public function tableName()
 	{
-		return 'shop_product_variation';
+		return 'variations';
 	}
 
 	/**
@@ -75,7 +75,7 @@ class ProductVariation extends CActiveRecord {
 	{
 		return array(
 			'product' => array(self::BELONGS_TO, 'Products', 'product_id'),
-			'specification' => array(self::BELONGS_TO, 'ProductSpecification', 'specification_id'),
+			'specification' => array(self::BELONGS_TO, 'Attribute', 'specification_id'),
 		);
 	}
 

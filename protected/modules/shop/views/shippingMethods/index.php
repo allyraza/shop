@@ -1,7 +1,7 @@
 <?php $methods = ShippingMethod::model()->findAll() ?>
 
 
-<h2><?= Shop::t('Available shipping methods') ?></h2>
+<h2>Available Shipping Methods</h2>
 
 <?php if (isset($methods)): ?>
 	<table>

@@ -14,11 +14,11 @@
     <div class="product-info">
         <strong><?= $data->formatedPrice ?></strong>
         <br>
-        <?= CHtml::link(Shop::t('Buy Now'), [
+        <?= CHtml::link('Buy Now', [
             '/shop/products/view', 
             'category'=> $data->category->title,
             'product'=> preg_replace('/[^a-zA-Z0-9]/', '-', $data->title),
-            'id' => $data->product_id]
+            'id' => $data->id]
         ) ?>
     </div>
 </div>

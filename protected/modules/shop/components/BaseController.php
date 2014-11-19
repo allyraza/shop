@@ -22,4 +22,23 @@ class BaseController extends CController {
 	 * for more details on how to specify this property.
 	 */
 	public $breadcrumbs=[];
+
+	public function getCart()
+	{
+		return Yii::app()->getModule('shop')->cart;
+	}
+
+	public function getUser()
+	{
+		return Yii::app()->user;
+	}
+
+	public function flash($name, $message=null)
+	{
+		if ($message===null) {
+			return Yii::app()->user->getFlash($name);
+		}
+		return Yii::app()->user->setFlash($name, $message);
+	}
+
 }

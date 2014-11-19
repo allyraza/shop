@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "shop_tax".
+ * This is the model class for table "taxes".
  *
- * The followings are the available columns in table 'shop_tax':
+ * The followings are the available columns in table 'taxes':
  * @property integer $id
  * @property string $title
  * @property integer $percent
@@ -24,7 +24,7 @@ class Tax extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'shop_tax';
+		return 'taxes';
 	}
 
 	/**

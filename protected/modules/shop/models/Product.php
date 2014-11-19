@@ -1,6 +1,7 @@
 <?php
+Yii::import('shop.components.cart.IECartPosition');
 
-class Product extends CActiveRecord {
+class Product extends CActiveRecord implements IECartPosition {
 
 	public static function model($className=__CLASS__)
 	{
@@ -9,7 +10,7 @@ class Product extends CActiveRecord {
 
 	public function tableName()
 	{
-		return Shop::module()->productsTable;
+		return Yii::app()->controller->module->productsTable;
 	}
 
 	public function getUrl()
@@ -17,7 +18,7 @@ class Product extends CActiveRecord {
 		return ['/shop/products/view', 
             'category' => $this->category->title,
             'product'=> preg_replace('/[^a-zA-Z0-9]/', '-', $this->title),
-            'id' => $this->product_id];
+            'id' => $this->id];
 	}
 
 	public function beforeValidate()
@@ -31,22 +32,22 @@ class Product extends CActiveRecord {
 	{
 		return [
 			['title, category_id', 'required'],
-			['product_id, category_id', 'numerical', 'integerOnly'=>true],
+			['id, category_id', 'numerical', 'integerOnly'=>true],
 			['title, price, language', 'length', 'max'=>45],
 			['description, specifications', 'safe'],
-			['product_id, title, description, price, category_id', 'safe', 'on'=>'search'],
+			['id, title, description, price, category_id', 'safe', 'on'=>'search'],
 		];
 	}
 
 	public function relations()
 	{
 		return [
-			'variations'=>[self::HAS_MANY, 'ProductVariation', 'product_id', 'order'=>'position'],
-			'orders'=>[self::MANY_MANY, 'Order', 'ShopProductOrder(order_id, product_id)'],
+			'variations'=>[self::HAS_MANY, 'Variation', 'id', 'order'=>'position'],
+			'orders'=>[self::MANY_MANY, 'Order', 'ShopProductOrder(order_id, id)'],
 			'category'=>[self::BELONGS_TO, 'Category', 'category_id'],
 			'tax'=>[self::BELONGS_TO, 'Tax', 'tax_id'],
-			'images'=>[self::HAS_MANY, 'Image', 'product_id'],
-			'carts'=>[self::HAS_MANY, 'ShoppingCart', 'product_id'],
+			'images'=>[self::HAS_MANY, 'Image', 'id'],
+			'carts'=>[self::HAS_MANY, 'ShoppingCart', 'id'],
 		];
 	}
 
@@ -61,7 +62,7 @@ class Product extends CActiveRecord {
 	public function getImage($image=0, $thumb=false)
 	{
 		if (isset($this->images[$image]))
-			return Yii::app()->controller->renderPartial('/image/view', ['model' => $this->images[$image], 'thumb' => $thumb], true); 
+			return Yii::app()->controller->renderPartial('/images/view', ['model' => $this->images[$image], 'thumb' => $thumb], true); 
 	}
 
 	public function getSpecifications()
@@ -86,7 +87,7 @@ class Product extends CActiveRecord {
 	public function setVariations($variations)
 	{
 		$db = Yii::app()->db;
-		$db->createCommand()->delete('shop_product_variation', 'product_id = :product_id', [':product_id' => $this->product_id]);
+		$db->createCommand()->delete('shop_product_variation', 'id = :id', [':id' => $this->id]);
 		foreach ($variations as $key => $value)
 		{
 			if ($value['specification_id'] && !empty($value['title']))
@@ -96,7 +97,7 @@ class Product extends CActiveRecord {
 					$value['price_adjustion'] -= 2 * $value['price_adjustion'];
 
 				$db->createCommand()->insert('shop_product_variation', [
-					'product_id' => $this->product_id,
+					'id' => $this->id,
 					'specification_id' => $value['specification_id'],
 					'position' => $value['position'] ?: 0,
 					'title' => $value['title'],
@@ -117,7 +118,7 @@ class Product extends CActiveRecord {
 	public function attributeLabels()
 	{
 		return [
-			'product_id' => Yii::t('ShopModule.shop', 'Product'),
+			'id' => Yii::t('ShopModule.shop', 'Product'),
 			'title' => Yii::t('ShopModule.shop', 'Title'),
 			'description' => Yii::t('ShopModule.shop', 'Description'),
 			'price' => Yii::t('ShopModule.shop', 'Price'),
@@ -125,16 +126,16 @@ class Product extends CActiveRecord {
 		];
 	}
 
-	public function getTaxRate($variations = null, $amount = 1)
+	public function getTaxRate($variations = [], $amount = 1)
 	{
 		if (isset($this->tax))
 		{
 			$taxrate = $this->tax->percent;	
 			$price = (float) $this->price;
-			if ($variations)
+			foreach ($variations as $key => $variation)
 			{
-				foreach ($variations as $key => $variation)
-					$price += @ProductVariation::model()->findByPk($variation[0])->price_adjustion;
+				if ($variation = Variation::model()->findByPk($variation))
+					$price += (int) $variation->price_adjustion;
 			}
 
 			return ($price * $amount) * ($taxrate / 100);
@@ -146,15 +147,14 @@ class Product extends CActiveRecord {
 		return Yii::app()->numberFormatter->formatCurrency($this->price, '$');
 	}
 
-	public function getPrice($variations = null, $amount = 1)
+	public function getPrice()
 	{
-		$price = (float) $this->price;
-		if ($variations)
-		{
-			foreach ($variations as $key => $variation)
-				$price += (int) ProductVariation::model()->findByPk($variation[0])->price_adjustion;
-		}
-		return $price *= $amount;
+		$this->price;
+	}
+
+	public function getId()
+	{
+		return $this->id;
 	}
 
 	public function search()
@@ -162,7 +162,7 @@ class Product extends CActiveRecord {
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('product_id',$this->product_id);
+		$criteria->compare('id',$this->id);
 		$criteria->compare('title',$this->title,true);
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('price',$this->price,true);

@@ -4,11 +4,6 @@ class ImagesController extends Controller {
 
 	public $_model;
 
-	public function beforeAction($action) {
-		$this->layout = Shop::module()->layout;
-		return parent::beforeAction($action);
-	}
-
 	public function actionView()
 	{
 		$this->render('view',array(
@@ -20,14 +15,15 @@ class ImagesController extends Controller {
 	{
 		$model=new Image;
 
-		if(isset($_POST['Image']))
+		if (isset($_POST['Image']))
 		{
 			$model->attributes=$_POST['Image'];
 			$model->filename = CUploadedFile::getInstance($model, 'filename');
-			if($model->save()) {
-				$folder = Yii::app()->controller->module->productImagesFolder; 
+			if ($model->save())
+			{
+				$folder = dirname(Yii::app()->basePath).'/'.Yii::app()->controller->module->uploads; 
 				$model->filename->saveAs($folder . '/' . $model->filename);
-				$this->redirect(array('//shop/products/admin'));
+				$this->redirect(['/shop/products/admin']);
 			}
 		}
 
@@ -42,10 +38,10 @@ class ImagesController extends Controller {
 
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Image']))
+		if (isset($_POST['Image']))
 		{
 			$model->attributes=$_POST['Image'];
-			if($model->save())
+			if ($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
@@ -75,7 +71,7 @@ class ImagesController extends Controller {
 
 	public function actionAdmin()
 	{
-		$product = Products::model()->findByPk($_GET['product_id']);
+		$product = Product::model()->findByPk($_GET['product_id']);
 
 		$images = $product->images;
 

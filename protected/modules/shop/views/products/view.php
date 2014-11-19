@@ -1,6 +1,6 @@
 <?php
 $this->breadcrumbs=[
-	Shop::t('Products')=>['index'],
+	'Products'=>['index'],
 	$model->title,
 ];
 ?>
@@ -31,7 +31,7 @@ $this->breadcrumbs=[
 
 <?php if ($model->specifications): ?>
 <table>
-	<tr><td colspan="2"><strong><?= Shop::t('Product Specifications') ?></strong></td></tr>
+	<tr><td colspan="2"><strong>Specification</strong></td></tr>
 <?php
 	foreach ($model->specifications as $key => $spec)
 	{
@@ -43,7 +43,7 @@ $this->breadcrumbs=[
 <?php endif ?>
 
 <div id="support">
-	<?= Shop::t('All prices are including VAT') ?>
-	<?= Shop::t('All prices excluding shipping costs') ?>
-	<?php $this->renderPartial('/shippingMethod/index') ?>
+	All prices are including VAT
+	All prices excluding shipping costs
+	<?php $this->renderPartial('/shippingMethods/index') ?>
 </div>

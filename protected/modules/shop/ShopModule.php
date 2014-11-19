@@ -2,6 +2,8 @@
 
 Yii::setPathOfAlias('shop', __DIR__);
 
+require(__DIR__.DIRECTORY_SEPARATOR.'helpers'.DIRECTORY_SEPARATOR.'helpers.php');
+
 class ShopModule extends CWebModule {
 
 	public $version = '0.1';
@@ -17,36 +19,36 @@ class ShopModule extends CWebModule {
 	public $userModule = false;
 
 	// Names of the tables
-	public $categoryTable = 'shop_category';
-	public $productsTable = 'shop_products';
-	public $orderTable = 'shop_order';
-	public $orderPositionTable = 'shop_order_position';
-	public $customerTable = 'shop_customer';
-	public $addressTable = 'shop_address';
-	public $imageTable = 'shop_image';
-	public $shippingMethodTable = 'shop_shipping_method';
-	public $paymentMethodTable = 'shop_payment_method';
-	public $taxTable = 'shop_tax';
-	public $productSpecificationTable = 'shop_product_specification';
-	public $productVariationTable = 'shop_product_variation';
+	public $categoriesTable = 'categories';
+	public $productsTable = 'products';
+	public $ordersTable = 'orders';
+	public $orderProductsTable = 'order_products';
+	public $customersTable = 'customers';
+	public $addressesTable = 'addreses';
+	public $imagesTable = 'images';
+	public $shippingMethodsTable = 'shipping_methods';
+	public $paymentMethodsTable = 'payment_methods';
+	public $taxesTable = 'taxes';
+	public $attributesTable = 'attributes';
+	public $variationsTable = 'variations';
 	public $currencySymbol = '$';
 
 	public $logoPath = 'logo.jpg';
-	public $slipView = '/order/slip';
-	public $invoiceView = '/order/invoice';
-	public $footerView = '/order/footer';
+	public $slipView = '/orders/slip';
+	public $invoiceView = '/orders/invoice';
+	public $footerView = '/orders/footer';
 
 	public $dateFormat = 'd/m/Y';
 	public $publishAssets = false;
 	
-	public $imageWidthThumb = 100;
+	public $thumbWidth = 100;
 	public $imageWidth = 200;
 
-	public $notifyAdminEmail = null;
+	public $adminEmail = null;
 
 	public $termsView = '/order/terms';
-	public $orderComplete = ['/shop/order/success'];
-	public $orderFail = ['//shop/order/failure'];
+	public $orderComplete = ['/shop/orders/success'];
+	public $orderFail = ['/shop/orders/failure'];
 	public $loginUrl = ['/site/login'];
 
 	// where the uploaded product images are stored its relative to webroot
@@ -56,10 +58,16 @@ class ShopModule extends CWebModule {
 
 	public function init()
 	{
-		$this->setImport(array(
+		$this->setImport([
 			'shop.models.*',
 			'shop.components.*',
-		));
+			'shop.components.cart.*',
+		]);
+		$this->setComponents([
+			'cart' => [
+				'class' => 'shop.components.cart.EShoppingCart'
+			]
+		]);
 	}
 
 	public function publishAssets()

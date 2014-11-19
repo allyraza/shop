@@ -1,30 +1,31 @@
 <header>
-	<?= CHtml::link(Shop::t('Cart'), ['/shop/cart']) ?>
+	<?= CHtml::link('Cart', ['/shop/cart']) ?>
 </header>
 
 <div id="dropdown">
 	<table id="items" cellpadding="0" cellspacing="0">
-	<?php if (!empty($products)): ?>
+	<?php if (!$cart->isEmpty()): ?>
 
-		<?php foreach ($products as $num => $position): ?>
-		<?php $model = Product::model()->findByPk($position['product_id']) ?>
+		<?php foreach ($cart as $p): ?>
 		<tr>
-			<td class="cart-left widget_amount_<?= $num ?>"><?= $position['amount'] ?></td>
-			<td class="cart-middle"><?= $model->title ?></td>
-			<td class="cart-right price_<?= $num ?>"><?= Yii::app()->numberFormatter->formatCurrency($position['amount'] * $model->getPrice(@$position['Variations']), '$') ?></td>
+			<td class="cart-left widget-amount-<?= $p->id ?>"><?= $p->quantity ?></td>
+			<td class="cart-middle"><?= $p->title ?></td>
+			<td class="cart-right price-<?= $p->id ?>"><?= price($p->price) ?></td>
 		</tr>
 		<?php endforeach ?>
 
-		<?php if ($shippingMethod = Shop::getShippingMethod()): ?>
+		<?php if (isset($cart->shippingMethod)): ?>
 		<tr>
 			<td class="cart-left">1</td>
-			<td class="cart-middle"><?= Shop::t('Shipping costs') ?></td>
-			<td class="cart-right"><?= $shippingMethod->formatedPrice ?></td>
+			<td class="cart-middle">Shipping Cost</td>
+			<td class="cart-right"><?= $cart->shippingMethod->formatedPrice ?></td>
 		</tr>
 		<?php endif ?>
 
 		<tr>
-			<td colspan="3" class="cart-right cart-total"><strong><?= Shop::getPriceTotal() ?></strong></td>
+			<td colspan="3" class="cart-right cart-total">
+				<strong><?= $cart->cost ?></strong>
+			</td>
 		</tr>
 
 		<?php else: ?>

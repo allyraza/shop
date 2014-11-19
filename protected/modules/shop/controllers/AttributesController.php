@@ -4,16 +4,10 @@ class AttributesController extends Controller {
 
 	public function filters()
 	{
-		return array(
+		return [
 			'accessControl', // perform access control for CRUD operations
-		);
+		];
 	}
-
-	public function beforeAction($action) {
-		$this->layout = Shop::module()->layout;
-		return parent::beforeAction($action);
-	}
-
 
 	public function accessRules()
 	{
@@ -27,7 +21,6 @@ class AttributesController extends Controller {
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -53,16 +46,16 @@ class AttributesController extends Controller {
 	 */
 	public function actionCreate()
 	{
-		$model=new ProductSpecification;
+		$model=new Attribute;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['ProductSpecification']))
+		if (isset($_POST['Attribute']))
 		{
-			$model->attributes=$_POST['ProductSpecification'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			$model->attributes=$_POST['Attribute'];
+			if ($model->save())
+				$this->redirect(['view', 'id'=>$model->id]);
 		}
 
 		$this->render('create',array(
@@ -82,10 +75,10 @@ class AttributesController extends Controller {
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['ProductSpecification']))
+		if (isset($_POST['Attribute']))
 		{
-			$model->attributes=$_POST['ProductSpecification'];
-			if($model->save())
+			$model->attributes=$_POST['Attribute'];
+			if ($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
@@ -101,13 +94,13 @@ class AttributesController extends Controller {
 	 */
 	public function actionDelete($id)
 	{
-		if(Yii::app()->request->isPostRequest)
+		if (Yii::app()->request->isPostRequest)
 		{
 			// we only allow deletion via POST request
 			$this->loadModel($id)->delete();
 
 			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-			if(!isset($_GET['ajax']))
+			if (!isset($_GET['ajax']))
 				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 		}
 		else
@@ -119,7 +112,7 @@ class AttributesController extends Controller {
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('ProductSpecification');
+		$dataProvider=new CActiveDataProvider('Attribute');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -130,10 +123,10 @@ class AttributesController extends Controller {
 	 */
 	public function actionAdmin()
 	{
-		$model=new ProductSpecification('search');
+		$model=new Attribute('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['ProductSpecification']))
-			$model->attributes=$_GET['ProductSpecification'];
+		if (isset($_GET['Attribute']))
+			$model->attributes=$_GET['Attribute'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -147,8 +140,8 @@ class AttributesController extends Controller {
 	 */
 	public function loadModel($id)
 	{
-		$model=ProductSpecification::model()->findByPk((int)$id);
-		if($model===null)
+		$model=Attribute::model()->findByPk((int)$id);
+		if ($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}
@@ -159,10 +152,11 @@ class AttributesController extends Controller {
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='product-specification-form')
+		if (isset($_POST['ajax']) && $_POST['ajax']==='product-specification-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
 	}
+
 }

@@ -27,29 +27,24 @@ class OrdersController extends Controller {
 				);
 	}
 
-	public function actionSlip($id) {
-		if($model = $this->loadModel($id))
+	public function actionSlip($id)
+	{
+		if ($model = $this->loadModel($id))
 			$this->render(Shop::module()->slipView, array('model' => $model));
 	}
 
-	public function actionInvoice($id) {
-		if($model = $this->loadModel($id))
+	public function actionInvoice($id)
+	{
+		if ($model = $this->loadModel($id))
 			$this->render(Shop::module()->invoiceView, array('model' => $model));
-	}
-
-
-
-	public function beforeAction($action) {
-		$this->layout = Shop::module()->layout;
-		return parent::beforeAction($action);
 	}
 
 
 	public function actionView()
 	{
-		$this->render('view',array(
-					'model'=>$this->loadModel(),
-					));
+		$this->render('view', [
+			'model'=>$this->loadModel(),
+		]);
 	}
 
 	/** Creation of a new Order 
@@ -60,20 +55,18 @@ class OrdersController extends Controller {
 	 * whether he is logged in into the system it is saved with his user 
 	 * account or once just for this order.	
 	 */
-	public function actionCreate(
-			$customer = null,
-			$payment_method = null,
-			$shipping_method = null) {
+	public function actionCreate($customer = null, $payment_method = null, $shipping_method = null)
+	{
 
-		if(isset($_POST['ShippingMethod'])) 
+		if (isset($_POST['ShippingMethod'])) 
 			Yii::app()->user->setState('shipping_method', $_POST['ShippingMethod']);
 
-		if(isset($_POST['PaymentMethod'])) 
+		if (isset($_POST['PaymentMethod'])) 
 			Yii::app()->user->setState('payment_method', $_POST['PaymentMethod']);
 
 
-		if(isset($_POST['DeliveryAddress']) && $_POST['DeliveryAddress'] === true) {
-			if(Address::isEmpty($_POST['DeliveryAddress'])) {
+		if (isset($_POST['DeliveryAddress']) && $_POST['DeliveryAddress'] === true) {
+			if (Address::isEmpty($_POST['DeliveryAddress'])) {
 				Shop::setFlash(Shop::t('Delivery address is not complete! Please fill in all fields to set the Delivery address'));
 			} else {
 				$deliveryAddress = new DeliveryAddress;
@@ -90,8 +83,9 @@ class OrdersController extends Controller {
 			}
 		}
 
-		if(isset($_POST['BillingAddress']) && $_POST['BillingAddress'] === true) {
-			if(Address::isEmpty($_POST['BillingAddress'])) {
+		if (isset($_POST['BillingAddress']) && $_POST['BillingAddress'] === true)
+		{
+			if (Address::isEmpty($_POST['BillingAddress'])) {
 				Shop::setFlash(Shop::t('Billing address is not complete! Please fill in all fields to set the Billing address'));
 			} else {
 				$BillingAddress = new BillingAddress;
@@ -142,17 +136,18 @@ class OrdersController extends Controller {
 			if(is_numeric($payment_method))
 				$payment_method = PaymentMethod::model()->findByPk($payment_method);
 
-			$this->render('/order/create', array(
-						'customer' => $customer,
-						'shippingMethod' => $shipping_method,
-						'paymentMethod' => $payment_method,
-						));
+			$this->render('/order/create', [
+				'customer' => $customer,
+				'shippingMethod' => $shipping_method,
+				'paymentMethod' => $payment_method,
+			));
 		}
 	}
 
-	public function actionConfirm() {
+	public function actionConfirm()
+	{
 		Yii::app()->user->setState('order_comment', @$_POST['Order']['Comment']);
-		if(isset($_POST['accept_terms']) && $_POST['accept_terms'] == 1) {
+		if (isset($_POST['accept_terms']) && $_POST['accept_terms'] == 1) {
 			$order = new Order();
 			$customer = Shop::getCustomer();
 			$cart = Shop::getCartContent();
@@ -160,7 +155,7 @@ class OrdersController extends Controller {
 			$order->customer_id = $customer->customer_id;
 
 			$address = new DeliveryAddress();
-			if($customer->deliveryAddress)
+			if ($customer->deliveryAddress)
 				$address->attributes = $customer->deliveryAddress->attributes;
 			else
 				$address->attributes = $customer->address->attributes;
@@ -168,7 +163,7 @@ class OrdersController extends Controller {
 			$order->delivery_address_id = $address->id;
 
 			$address = new BillingAddress();
-			if($customer->billingAddress)
+			if ($customer->billingAddress)
 				$address->attributes = $customer->billingAddress->attributes;
 			else
 				$address->attributes = $customer->address->attributes;
@@ -181,8 +176,8 @@ class OrdersController extends Controller {
 			$order->comment = Yii::app()->user->getState('order_comment');
 
 
-			if($order->save()) {
-				foreach($cart as $position => $product) {
+			if ($order->save()) {
+				foreach ($cart as $position => $product) {
 					$position = new OrderPosition;
 					$position->order_id = $order->order_id;
 					$position->product_id = $product['product_id'];
@@ -199,42 +194,38 @@ class OrdersController extends Controller {
 			} else 
 				$this->redirect(Shop::module()->failureAction);
 		} else {
-			Shop::setFlash(
-					Shop::t(
-						'Please accept our Terms and Conditions to continue'));
-			$this->redirect(array('//shop/order/create'));
+			Shop::setFlash(Shop::t('Please accept our Terms and Conditions to continue'));
+			$this->redirect(['/shop/orderS/create']);
 		}
 	}
 
 	public function actionSuccess()
 	{
-		$this->render('/order/success');
+		$this->render('/orders/success');
 	}
 
 	public function actionFailure()
 	{
-		$this->render('/order/failure');
+		$this->render('/orders/failure');
 	}
 
 
 	public function actionAdmin()
 	{
 		$model=new Order('search');
-		if(isset($_GET['Order']))
+		if (isset($_GET['Order']))
 			$model->attributes=$_GET['Order'];
 
-		$this->render('admin',array(
-					'model'=>$model,
-					));
+		$this->render('admin', ['model'=>$model]);
 	}
 
 	public function loadModel()
 	{
-		if($this->_model===null)
+		if ($this->_model===null)
 		{
-			if(isset($_GET['id']))
+			if (isset($_GET['id']))
 				$this->_model=Order::model()->findbyPk($_GET['id']);
-			if($this->_model===null)
+			if ($this->_model===null)
 				throw new CHttpException(404,'The requested page does not exist.');
 		}
 		return $this->_model;

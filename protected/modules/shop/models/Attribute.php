@@ -7,7 +7,7 @@
  * @property integer $id
  * @property string $title
  */
-class ProductSpecification extends CActiveRecord
+class Attribute extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -27,7 +27,7 @@ class ProductSpecification extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'shop_product_specification';
+		return 'attributes';
 	}
 
 	/**

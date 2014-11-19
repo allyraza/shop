@@ -2,8 +2,8 @@
 
 class ProductsController extends Controller
 {
-	public $_model;
 
+	public $_model;
 
 	public function filters()
 	{
@@ -69,24 +69,24 @@ class ProductsController extends Controller
 
 		$this->performAjaxValidation($model);
 
-		if(isset($_POST['Product']))
+		if (isset($_POST['Product']))
 		{
 			$model->attributes=$_POST['Product'];
-			if(isset($_POST['Specifications']))
+			if (isset($_POST['Specifications']))
 				$model->setSpecifications($_POST['Specifications']);
-			if(isset($_POST['Variations']))
+			if (isset($_POST['Variations']))
 				$model->setVariations($_POST['Variations']);
 
-			if($model->save())
-				if($return == 'product')
+			if ($model->save())
+			{
+				if ($return == 'product')
 					$this->redirect(array('products/update', 'id' => $model->product_id));
 				else
 					$this->redirect(array('products/admin'));
+			}
 		}
 
-		$this->render('update',array(
-			'model'=>$model,
-		));
+		$this->render('update', compact('model'));
 	}
 
 	/**
@@ -95,14 +95,14 @@ class ProductsController extends Controller
 	 */
 	public function actionDelete()
 	{
-		if(Yii::app()->request->isPostRequest)
+		if (Yii::app()->request->isPostRequest)
 		{
 			// we only allow deletion via POST request
 			$this->loadModel()->delete();
 
 			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-			if(!isset($_POST['ajax']))
-				$this->redirect(array('index'));
+			if (!isset($_POST['ajax']))
+				$this->redirect(['index']);
 		}
 		else
 			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
@@ -114,10 +114,7 @@ class ProductsController extends Controller
 	public function actionIndex()
 	{
 		$dataProvider = new CActiveDataProvider('Product');
-
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
+		$this->render('index', compact('dataProvider'));
 	}
 
 	/**
@@ -129,9 +126,7 @@ class ProductsController extends Controller
 		if (isset($_GET['Product']))
 			$model->attributes=$_GET['Product'];
 
-		$this->render('admin',array(
-			'model'=>$model,
-		));
+		$this->render('admin', compact('model'));
 	}
 
 	/**
@@ -140,11 +135,11 @@ class ProductsController extends Controller
 	 */
 	public function loadModel()
 	{
-		if($this->_model===null)
+		if ($this->_model===null)
 		{
-			if(isset($_GET['id']))
+			if (isset($_GET['id']))
 				$this->_model=Product::model()->findbyPk($_GET['id']);
-			if($this->_model===null)
+			if ($this->_model===null)
 				throw new CHttpException(404,'The requested page does not exist.');
 		}
 		return $this->_model;
@@ -156,10 +151,11 @@ class ProductsController extends Controller
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='products-form')
+		if (isset($_POST['ajax']) && $_POST['ajax']==='products-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
 	}
+
 }

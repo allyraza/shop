@@ -1,5 +1,5 @@
 <?php 
-$folder = Shop::module()->uploads;
+$folder = Yii::app()->getModule('shop')->uploads;
 
 if($model->filename) 
 	$path = Yii::app()->baseUrl. '/' . $folder . '/' . $model->filename;
@@ -12,10 +12,10 @@ if($model->filename)
 		[
 			'title' => $model->title,
 			'style' => 'margin: 10px;',
-			'width' => isset($thumb) ? Shop::module()->imageWidthThumb : Shop::module()->imageWidth
+			'width' => isset($thumb) ? Yii::app()->getModule('shop')->thumbWidth : Yii::app()->getModule('shop')->imageWidth
 		]
 	);
 ?>
-<?php if (Shop::module()->userModule && Yii::app()->user->isAdmin()): ?>
+<?php if (Yii::app()->getModule('shop')->userModule && Yii::app()->user->isAdmin()): ?>
 	<?= CHtml::link(Yii::t('ShopModule.shop', 'Delete Image'), ['delete', 'id'=>$model->id]) ?>
 <?php endif ?>

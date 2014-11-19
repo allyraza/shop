@@ -4,12 +4,6 @@ class CategoriesController extends BaseController {
 
 	public $_model;
 
-	public function beforeAction($action)
-	{
-		$this->layout = Shop::module()->layout;
-		return parent::beforeAction($action);
-	}
-
 	public function actionView()
 	{
 		$this->render('view',array(

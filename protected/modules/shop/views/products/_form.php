@@ -1,8 +1,8 @@
 <?php 
 function renderVariation($variation, $i) { 
-	if(!ProductSpecification::model()->findByPk(1))
+	if(!Attribute::model()->findByPk(1))
 		return false;
-	if(!$variation) {
+	if (!$variation) {
 		$variation = new ProductVariation;
 		$variation->specification_id = 1;
 	}
@@ -10,7 +10,7 @@ function renderVariation($variation, $i) {
 	$str = '<tr> <td>';
 	$str .= CHtml::dropDownList("Variations[{$i}][specification_id]",
 			$variation->specification_id, CHtml::listData(
-				ProductSpecification::model()->findall(), "id", "title"), array(
+				Attribute::model()->findall(), "id", "title"), array(
 				'empty' => '-'));  
 
 	$str .= '</td> <td>';
@@ -78,7 +78,7 @@ return $str;
 <?php echo $form->error($model,'price'); ?>
 </div>
 
-<?php foreach(ProductSpecification::model()->findAll() as $specification) { ?>
+<?php foreach(Attribute::model()->findAll() as $specification) { ?>
 	<div class="row">
 		<?php echo CHtml::label($specification->title, ''); ?>
 		<?php echo CHtml::textField("Specifications[{$specification->title}]",
