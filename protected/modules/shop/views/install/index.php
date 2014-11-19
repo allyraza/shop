@@ -4,6 +4,7 @@
 <?= CHtml::beginForm(array('index')) ?>
 
 <div class="span-12">
+
 	<h2> Information: </h2>
 	<hr />
 
@@ -99,9 +100,5 @@
 	<p> Your Product images will be stored under /www/<?= $module->uploads; ?> </p>
 </div>
 
-
-<div style="clear:both;"> </div>
-
 <?= CHtml::submitButton('Install'); ?>
 <?= CHtml::endForm(); ?>
-
